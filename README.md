@@ -1,6 +1,6 @@
 # NAME
 
-ricube::api - Blah blah blah
+Ricube::Api - Blah blah blah
 
 # SYNOPSIS
 
@@ -8,7 +8,7 @@ ricube::api - Blah blah blah
 
 # DESCRIPTION
 
-ricube::api is
+Ricube::Api is
 
 # AUTHOR
 
