@@ -32,7 +32,7 @@ Copyright 2016- Gerard Ribugent Navarro
 =head1 LICENSE
 
 This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.
+it under the same terms as gpl_2 itself.
 
 =head1 SEE ALSO
 
