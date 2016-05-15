@@ -4,6 +4,24 @@ use strict;
 use 5.008_005;
 our $VERSION = '0.01';
 
+our $URL = 'https://api.ricube.net';
+
+# New method
+sub new {
+  my ($this, %pars) = @_;
+
+  my $self = bless {
+    map {exists $pars{$_}? ($_ => $pars{$_}) : () } qw/client_id client_secret access_token/
+  }, $this;
+
+  return $self;
+}
+
+# TODO:
+# - get redirect url
+# - exchange token method
+# - generic request to protected resouseces
+
 1;
 __END__
 
