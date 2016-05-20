@@ -4,23 +4,47 @@ use strict;
 use 5.008_005;
 our $VERSION = '0.01';
 
+use LWP::UserAgent;
+use JSON::MaybeXS qw/decode_json/;
+use Encode qw/encode_utf8/;
+
 our $URL = 'https://api.ricube.net';
 
 # New method
 sub new {
-  my ($this, %pars) = @_;
+	my ($this, %pars) = @_;
 
-  my $self = bless {
-    map {exists $pars{$_}? ($_ => $pars{$_}) : () } qw/client_id client_secret access_token/
-  }, $this;
+	my $self = bless {map { exists $pars{$_} ? ($_ => $pars{$_}) : () } qw/client_id client_secret access_token/}, $this;
 
-  return $self;
+	$self->{ua} //= LWP::UserAgent->new();
+	$self->{ua}->default_header('Authorization' => "Bearer $self->{access_token}");
+
+	return $self;
+}
+
+# Get current user
+sub me {
+	return shift->_oauth2Request(get => 'users/me');
+}
+
+# Generic request to protected resouseces
+sub _oauth2Request {
+	my ($self, $method, $path, $body) = @_;
+
+	my $r = $self->{ua}->$method("$URL/1/$path", $body ? (Content => encode_utf8($body)) : ());
+
+	my $json;
+	if ($r->content) {
+		$json = decode_json($r->decoded_content(charset => 'none'));
+	}
+
+	die($json) if (!$r->is_success());
+	return $json || 1;
 }
 
 # TODO:
 # - get redirect url
 # - exchange token method
-# - generic request to protected resouseces
 
 1;
 __END__
@@ -29,15 +53,15 @@ __END__
 
 =head1 NAME
 
-ricube::api - Blah blah blah
+Ricube::Api - Simple client to access https://ricube.net api
 
 =head1 SYNOPSIS
 
-  use ricube::api;
+  use Ricube::Api;
 
 =head1 DESCRIPTION
 
-ricube::api is
+Ricube::Api is
 
 =head1 AUTHOR
 

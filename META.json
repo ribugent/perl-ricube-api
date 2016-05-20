@@ -1,5 +1,5 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "Simple client to access https://ricube.net api",
    "author" : [
       "Gerard Ribugent Navarro <ribugent@gmail.com>"
    ],
@@ -37,7 +37,11 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "Encode" : "0",
+            "JSON::MaybeXS" : "0",
+            "LWP::UserAgent" : "0",
+            "perl" : "5.008005",
+            "strict" : "0"
          }
       },
       "test" : {
@@ -47,5 +51,17 @@
       }
    },
    "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ribugent/perl-ricube-api/issues"
+      },
+      "homepage" : "https://github.com/ribugent/perl-ricube-api",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/ribugent/perl-ricube-api.git",
+         "web" : "https://github.com/ribugent/perl-ricube-api"
+      }
+   },
    "version" : "0.01"
 }
+

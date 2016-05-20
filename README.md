@@ -1,10 +1,10 @@
 # NAME
 
-Ricube::Api - Blah blah blah
+Ricube::Api - Simple client to access https://ricube.net api
 
 # SYNOPSIS
 
-    use ricube::api;
+    use Ricube::Api;
 
 # DESCRIPTION
 

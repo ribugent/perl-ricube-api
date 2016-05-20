@@ -1,6 +1,6 @@
 use strict;
 use Test::More;
-use ricube::api;
+use Ricube::Api;
 
 # replace with the actual test
 ok 1;
