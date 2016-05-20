@@ -27,6 +27,29 @@ sub me {
 	return shift->_oauth2Request(get => 'users/me');
 }
 
+# List tags
+sub tags {
+	return shift->_oauth2Request(get => 'tags');
+}
+
+# Tag info
+sub tag {
+	return shift->_oauth2Request(get => 'tag/' . shift);
+}
+
+# Link info
+sub link {
+	return shift->_oauth2Request(get => 'links/' . shift);
+}
+
+# Search engine
+sub search {
+	my ($self, @pars) = @_;
+	my $path = URI->new('links/search');
+	$path->query_form(@pars);
+	return shift->_oauth2Request(get => $path);
+}
+
 # Generic request to protected resouseces
 sub _oauth2Request {
 	my ($self, $method, $path, $body) = @_;
@@ -45,6 +68,7 @@ sub _oauth2Request {
 # TODO:
 # - get redirect url
 # - exchange token method
+# - Implement not GET methods
 
 1;
 __END__
