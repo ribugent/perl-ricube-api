@@ -34,12 +34,42 @@ sub tags {
 
 # Tag info
 sub tag {
-	return shift->_oauth2Request(get => 'tag/' . shift);
+	return shift->_oauth2Request(get => 'tags/' . shift);
+}
+
+# Create tag
+sub createTag {
+	return shift->_oauth2Request(post => 'tags/', shift);
+}
+
+# Update tag
+sub updateTag {
+	return shift->_oauth2Request(put => 'tags/' . shift, shift);
+}
+
+# Delete tag
+sub deleteTag {
+	return shift->_oauth2Request(delete => 'tags/' . shift);
 }
 
 # Link info
 sub link {
 	return shift->_oauth2Request(get => 'links/' . shift);
+}
+
+# Create link
+sub createLink {
+	return shift->_oauth2Request(post => 'links', shift);
+}
+
+# Add tag to link
+sub createLinkTag {
+	return shift->_oauth2Request(post => 'links/' . shift . '/tags', shift);
+}
+
+# Delete tag of link
+sub createLinkTag {
+	return shift->_oauth2Request(delete => 'links/' . shift . '/tags/' . shift);
 }
 
 # Search engine
@@ -69,6 +99,7 @@ sub _oauth2Request {
 # - get redirect url
 # - exchange token method
 # - Implement not GET methods
+# - Not all requests return json
 
 1;
 __END__
