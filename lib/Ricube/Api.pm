@@ -9,6 +9,7 @@ our $VERSION = '0.01';
 use LWP::UserAgent;
 use JSON::MaybeXS qw/decode_json/;
 use Encode qw/encode_utf8 decode_utf8/;
+use URI;
 
 our $URL = 'https://api.ricube.net';
 
@@ -22,6 +23,17 @@ sub new {
 	$self->{ua}->default_header('Authorization' => "Bearer $self->{access_token}");
 
 	return $self;
+}
+
+# Exchange token
+sub oauth2Token {
+	my ($self, $code, $redirectUrl) = @_;
+	my $uri = URI->new("$URL/oauth2/token");
+	$uri->query_form(code => $code, redirect_uri => $redirectUrl);
+
+	my $r = $self->{ua}->get($uri);
+	return if (!$r->is_success);
+	return decode_utf8($r->decoded_content(charset => 'none'));
 }
 
 # Get current user
@@ -103,7 +115,6 @@ sub _oauth2Request {
 
 # TODO:
 # - get redirect url
-# - exchange token method
 
 1;
 __END__
