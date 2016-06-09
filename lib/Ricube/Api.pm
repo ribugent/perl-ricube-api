@@ -12,6 +12,7 @@ use Encode qw/encode_utf8 decode_utf8/;
 use URI;
 
 our $URL = 'https://api.ricube.net';
+our $AUTHORIZE_URL = 'https://ricube.net/oauth2/authorize';
 
 # New method
 sub new {
@@ -34,6 +35,18 @@ sub oauth2Token {
 	my $r = $self->{ua}->get($uri);
 	return if (!$r->is_success);
 	return decode_utf8($r->decoded_content(charset => 'none'));
+}
+
+# Return authorize url
+sub authorizeUrl {
+	my ($self, $responseType, $redirect_uri) = @_;
+	my $uri = URI->new($AUTHORIZE_URL);
+	$uri->query_form(
+		client_id => $self->{client_id},
+		response_type => $responseType,
+		redirect_uri => $redirect_uri
+	);
+	return $uri;
 }
 
 # Get current user
@@ -112,9 +125,6 @@ sub _oauth2Request {
 
 	die("Missing responseType");
 }
-
-# TODO:
-# - get redirect url
 
 1;
 __END__
