@@ -1,12 +1,14 @@
 package Ricube::Api;
 
 use strict;
+use warnings;
+
 use 5.008_005;
 our $VERSION = '0.01';
 
 use LWP::UserAgent;
 use JSON::MaybeXS qw/decode_json/;
-use Encode qw/encode_utf8/;
+use Encode qw/encode_utf8 decode_utf8/;
 
 our $URL = 'https://api.ricube.net';
 
@@ -44,12 +46,12 @@ sub createTag {
 
 # Update tag
 sub updateTag {
-	return shift->_oauth2Request(put => 'tags/' . shift, shift);
+	return shift->_oauth2Request(put => 'tags/' . shift, shift, 'none');
 }
 
 # Delete tag
 sub deleteTag {
-	return shift->_oauth2Request(delete => 'tags/' . shift);
+	return shift->_oauth2Request(delete => 'tags/' . shift, undef, 'none');
 }
 
 # Link info
@@ -64,12 +66,12 @@ sub createLink {
 
 # Add tag to link
 sub createLinkTag {
-	return shift->_oauth2Request(post => 'links/' . shift . '/tags', shift);
+	return shift->_oauth2Request(post => 'links/' . shift . '/tags', shift, 'none');
 }
 
 # Delete tag of link
-sub createLinkTag {
-	return shift->_oauth2Request(delete => 'links/' . shift . '/tags/' . shift);
+sub deleteLinkTag {
+	return shift->_oauth2Request(delete => 'links/' . shift . '/tags/' . shift, 'none');
 }
 
 # Search engine
@@ -82,24 +84,26 @@ sub search {
 
 # Generic request to protected resouseces
 sub _oauth2Request {
-	my ($self, $method, $path, $body) = @_;
-
+	my ($self, $method, $path, $body, $responseType) = @_;
+	$responseType //= 'json';
 	my $r = $self->{ua}->$method("$URL/1/$path", $body ? (Content => encode_utf8($body)) : ());
 
-	my $json;
-	if ($r->content) {
-		$json = decode_json($r->decoded_content(charset => 'none'));
+	my $content = $r->decoded_content(charset => 'none');
+
+	if ($responseType eq 'json') {
+		return decode_json($content);
+	} elsif ($responseType eq 'text') {
+		return decode_utf8($content);
+	} elsif ($responseType eq 'none') {
+		return !$responseType && $r->is_success();
 	}
 
-	die($json) if (!$r->is_success());
-	return $json || 1;
+	die("Missing responseType");
 }
 
 # TODO:
 # - get redirect url
 # - exchange token method
-# - Implement not GET methods
-# - Not all requests return json
 
 1;
 __END__
