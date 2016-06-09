@@ -40,8 +40,10 @@
             "Encode" : "0",
             "JSON::MaybeXS" : "0",
             "LWP::UserAgent" : "0",
+            "URI" : "0",
             "perl" : "5.008005",
-            "strict" : "0"
+            "strict" : "0",
+            "warnings" : "0"
          }
       },
       "test" : {
